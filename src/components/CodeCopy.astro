@@ -1,0 +1,31 @@
+<script>
+  function setup() {
+    document.querySelectorAll<HTMLElement>('.prose-makora pre').forEach((pre) => {
+      if (pre.parentElement?.classList.contains('code-wrap')) return;
+
+      const wrap = document.createElement('div');
+      wrap.className = 'code-wrap';
+      pre.parentNode?.insertBefore(wrap, pre);
+      wrap.appendChild(pre);
+
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'code-copy';
+      btn.textContent = 'Copy';
+      btn.setAttribute('aria-label', 'Copy code to clipboard');
+
+      btn.addEventListener('click', async () => {
+        try {
+          await navigator.clipboard.writeText(pre.innerText);
+          btn.textContent = 'Copied!';
+        } catch {
+          btn.textContent = 'Failed';
+        }
+        setTimeout(() => (btn.textContent = 'Copy'), 1800);
+      });
+
+      wrap.appendChild(btn);
+    });
+  }
+  setup();
+</script>

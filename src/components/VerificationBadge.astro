@@ -1,0 +1,16 @@
+---
+interface Props {
+  status: 'verified' | 'unverified' | 'demo';
+}
+const { status } = Astro.props;
+
+const map = {
+  verified: { label: 'Verified', cls: 'bg-brand/15 text-brand' },
+  unverified: { label: 'Unverified', cls: 'bg-accent/15 text-accent' },
+  demo: { label: 'Demo content', cls: 'bg-accent/15 text-accent' },
+} as const;
+
+const s = map[status];
+---
+
+<span class={`rounded-full px-2.5 py-1 text-xs font-medium ${s.cls}`}>{s.label}</span>

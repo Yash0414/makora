@@ -1,0 +1,19 @@
+---
+interface Props {
+  status: 'verified' | 'unverified' | 'demo';
+}
+const { status } = Astro.props;
+---
+
+{status !== 'verified' && (
+  <div role="note" class="rounded-card border border-accent/40 bg-accent/10 p-4 text-sm">
+    <p class="font-semibold text-accent">
+      {status === 'demo' ? 'Demo content' : 'Not yet verified'}
+    </p>
+    <p class="mt-1 text-muted">
+      {status === 'demo'
+        ? 'This page uses placeholder text. Parts, wiring and steps are not real. Do not build from this page.'
+        : 'The details on this page have not been tested by the Makora team. Double-check wiring and code before powering anything.'}
+    </p>
+  </div>
+)}
