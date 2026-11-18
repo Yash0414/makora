@@ -1,0 +1,82 @@
+@import "tailwindcss";
+@import "@fontsource-variable/inter";
+@import "@fontsource-variable/jetbrains-mono";
+
+/* ---------- Theme colors (dark-first) ---------- */
+:root {
+  --bg: #070a12;
+  --surface: #0e1320;
+  --surface-2: #151c2e;
+  --border: #232c44;
+  --text: #e8ecf5;
+  --muted: #98a2bd;
+  --brand: #38d3c8;
+  --brand-strong: #1fb5ab;
+  --accent: #ffb454;
+  color-scheme: dark;
+}
+
+/* Light theme: baad me toggle lagayenge, abhi ready rakha hai */
+:root[data-theme="light"] {
+  --bg: #f7f9fc;
+  --surface: #ffffff;
+  --surface-2: #eef2f8;
+  --border: #d5dcea;
+  --text: #121826;
+  --muted: #516078;
+  --brand: #0b8f86;
+  --brand-strong: #07726b;
+  --accent: #b86a00;
+  color-scheme: light;
+}
+
+/* ---------- Tailwind tokens ---------- */
+@theme inline {
+  --font-sans: "Inter Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono Variable", ui-monospace, monospace;
+
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-border: var(--border);
+  --color-text: var(--text);
+  --color-muted: var(--muted);
+  --color-brand: var(--brand);
+  --color-brand-strong: var(--brand-strong);
+  --color-accent: var(--accent);
+
+  --radius-card: 1rem;
+  --shadow-glow: 0 0 40px -10px color-mix(in srgb, var(--brand) 45%, transparent);
+}
+
+/* ---------- Base styles ---------- */
+@layer base {
+  html {
+    background-color: var(--bg);
+    scroll-behavior: smooth;
+  }
+  body {
+    @apply bg-bg font-sans text-text antialiased;
+  }
+  ::selection {
+    background-color: color-mix(in srgb, var(--brand) 35%, transparent);
+  }
+  :focus-visible {
+    outline: 2px solid var(--brand);
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+}
+
+/* Animations band kar do agar user ne "reduce motion" on rakha hai */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
