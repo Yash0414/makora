@@ -1,0 +1,79 @@
+---
+interface Props {
+  categories: string[];
+  difficulties: string[];
+}
+const { categories, difficulties } = Astro.props;
+const selectClass =
+  'mt-1 w-full rounded-lg border border-border bg-surface px-3 py-2 text-sm text-text';
+---
+
+<div class="mt-8 grid gap-4 sm:grid-cols-3">
+  <div>
+    <label for="filter-category" class="text-xs uppercase tracking-wider text-muted">Category</label>
+    <select id="filter-category" class={selectClass}>
+      <option value="">All categories</option>
+      {categories.map((c) => <option value={c}>{c}</option>)}
+    </select>
+  </div>
+  <div>
+    <label for="filter-difficulty" class="text-xs uppercase tracking-wider text-muted">Difficulty</label>
+    <select id="filter-difficulty" class={selectClass}>
+      <option value="">All levels</option>
+      {difficulties.map((d) => <option value={d}>{d}</option>)}
+    </select>
+  </div>
+  <div class="flex items-end">
+    <button
+      id="filter-reset"
+      type="button"
+      class="rounded-lg border border-border px-4 py-2 text-sm text-muted transition hover:border-brand hover:text-brand"
+    >
+      Reset filters
+    </button>
+  </div>
+</div>
+
+<p id="filter-empty" class="mt-10 hidden text-muted">No projects match these filters.</p>
+
+<script>
+  const cat = document.getElementById('filter-category') as HTMLSelectElement | null;
+  const diff = document.getElementById('filter-difficulty') as HTMLSelectElement | null;
+  const reset = document.getElementById('filter-reset');
+  const empty = document.getElementById('filter-empty');
+  const items = document.querySelectorAll<HTMLElement>('#project-grid > [data-category]');
+
+  function apply() {
+    const c = cat?.value ?? '';
+    const d = diff?.value ?? '';
+    let shown = 0;
+    items.forEach((el) => {
+      const ok =
+        (!c || el.dataset.category === c) && (!d || el.dataset.difficulty === d);
+      el.classList.toggle('hidden', !ok);
+      if (ok) shown++;
+    });
+    empty?.classList.toggle('hidden', shown > 0);
+
+    const url = new URL(window.location.href);
+    c ? url.searchParams.set('category', c) : url.searchParams.delete('category');
+    d ? url.searchParams.set('difficulty', d) : url.searchParams.delete('difficulty');
+    history.replaceState(null, '', url);
+  }
+
+  // URL se filter padhna (homepage ke category cards ke liye)
+  const params = new URLSearchParams(window.location.search);
+  const pc = params.get('category');
+  const pd = params.get('difficulty');
+  if (cat && pc) cat.value = pc;
+  if (diff && pd) diff.value = pd;
+
+  cat?.addEventListener('change', apply);
+  diff?.addEventListener('change', apply);
+  reset?.addEventListener('click', () => {
+    if (cat) cat.value = '';
+    if (diff) diff.value = '';
+    apply();
+  });
+  apply();
+</script>

@@ -2,6 +2,7 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import SectionHeading from '../components/SectionHeading.astro';
 import ProjectCard from '../components/ProjectCard.astro';
+import { getCollection } from 'astro:content';
 
 const categories = [
   { name: 'Arduino', desc: 'Start with the basics of microcontrollers.' },
@@ -19,6 +20,11 @@ const steps = [
   { n: '02', title: 'Gather components', text: 'Every project lists parts with quantities.' },
   { n: '03', title: 'Build step by step', text: 'Follow circuits, code and assembly images.' },
 ];
+const featured = (await getCollection('projects', ({ data }) => data.featured && !data.draft))
+  .sort((a, b) => b.data.publishedDate.getTime() - a.data.publishedDate.getTime())
+  .slice(0, 3);
+
+
 ---
 
 <BaseLayout>
@@ -74,9 +80,16 @@ const steps = [
       text="Demo placeholders for now. Real, documented projects will replace these."
     />
     <div class="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-      <ProjectCard title="Demo Project One" category="Arduino" difficulty="Beginner" time="~1 hour" demo />
-      <ProjectCard title="Demo Project Two" category="ESP32" difficulty="Intermediate" time="~3 hours" demo />
-      <ProjectCard title="Demo Project Three" category="Robotics" difficulty="Advanced" time="~6 hours" demo />
+      {featured.map((p) => (
+        <ProjectCard
+          title={p.data.title}
+          category={p.data.category}
+          difficulty={p.data.difficulty}
+          time={p.data.time}
+          href={`/projects/${p.id}`}
+          demo={p.data.verification === 'demo'}
+        />
+      ))}
     </div>
   </section>
 

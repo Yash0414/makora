@@ -144,3 +144,13 @@
   border-color: var(--brand);
   color: var(--brand);
 }
+/* ---------- Pagefind search (dark theme) ---------- */
+#search {
+  --pagefind-ui-scale: 0.9;
+  --pagefind-ui-primary: var(--brand);
+  --pagefind-ui-text: var(--text);
+  --pagefind-ui-background: var(--surface);
+  --pagefind-ui-border: var(--border);
+  --pagefind-ui-tag: var(--surface-2);
+  --pagefind-ui-font: var(--font-sans);
+}
